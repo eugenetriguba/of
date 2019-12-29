@@ -27,9 +27,6 @@ func (todo *Todo) Send(email string) error {
 		message.Attach(todo.Attachment)
 	}
 
-	fmt.Println(message)
-	fmt.Println(todo.Note)
-
 	config := configuration.Configuration{}
 	err := config.Parse()
 	if err != nil {

@@ -1,17 +1,3 @@
-// Omnifocus (OF) CLI
-//
-// The Omnifocus CLI allows you to quickly send items to your omnifocus inbox.
-//
-// You'll first want to configure your mail drop email using the -email flag. After that,
-// you can get started. Anything after 'of' will be parsed as the todo item name. You can
-// then also add a additional note or attachment using a flag.
-//
-// Usage:
-//   $ of -email fake.mail.drop.email@sync.omnigroup.com
-//   > Successfully set your omnifocus mail drop email to fake.mail.drop.email@sync.omnigroup.com
-//   $ of "Take dog for a walk" -note "Make sure he is on his leash" -attachment ~/dogs/walk-schedule.pdf
-//   > Successfully sent your todo!
-
 package main
 
 import (
@@ -53,10 +39,6 @@ func main() {
 	}
 
 	newTodo := todo.Todo{Name: flag.Arg(0), Note: *note, Attachment: *attachment}
-	fmt.Println(flag.NFlag())
-	fmt.Println(newTodo)
-	fmt.Println(*note)
-	fmt.Println(*attachment)
 	err = newTodo.Send(config.MailDropEmail)
 	if err != nil {
 		fmt.Println("An error occurred while trying to send the email: ", err)
