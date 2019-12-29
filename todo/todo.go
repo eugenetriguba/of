@@ -2,7 +2,6 @@ package todo
 
 import (
 	"errors"
-	"fmt"
 	"gopkg.in/gomail.v2"
 	"of/configuration"
 )

@@ -14,6 +14,11 @@ func main() {
 	attachment := flag.String("attachment", "", "Add an attachment along with the todo item. This should be an absolute path to the item.")
 	flag.Parse()
 
+	if flag.Arg(0) == "" {
+		fmt.Println("Error: There wasn't a task name specified.")
+		os.Exit(1)
+	}
+
 	config := configuration.Configuration{}
 
 	if *email != "" {
