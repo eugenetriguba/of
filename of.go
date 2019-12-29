@@ -3,8 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"of/configuration"
-	"of/todo"
+	"of/cmd"
 	"os"
 )
 
@@ -19,7 +18,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	config := configuration.Configuration{}
+	config := cmd.Configuration{}
 
 	if *email != "" {
 		config.MailDropEmail = *email
@@ -43,7 +42,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	newTodo := todo.Todo{Name: flag.Arg(0), Note: *note, Attachment: *attachment}
+	newTodo := cmd.Todo{Name: flag.Arg(0), Note: *note, Attachment: *attachment}
 	err = newTodo.Send(config.MailDropEmail)
 	if err != nil {
 		fmt.Println("An error occurred while trying to send the email: ", err)

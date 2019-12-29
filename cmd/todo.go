@@ -1,9 +1,8 @@
-package todo
+package cmd
 
 import (
 	"errors"
 	"gopkg.in/gomail.v2"
-	"of/configuration"
 )
 
 type Todo struct {
@@ -26,7 +25,7 @@ func (todo *Todo) Send(email string) error {
 		message.Attach(todo.Attachment)
 	}
 
-	config := configuration.Configuration{}
+	config := Configuration{}
 	err := config.Parse()
 	if err != nil {
 		return err
