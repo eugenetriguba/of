@@ -2,7 +2,7 @@
 
 > Quickly send items to your inbox
 
-<p align="center">
+<p>
     <a href="https://goreportcard.com/report/github.com/eugenetriguba/of">
         <img src="https://goreportcard.com/badge/github.com/eugenetriguba/of">
     </a>
