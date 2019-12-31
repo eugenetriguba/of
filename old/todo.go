@@ -1,7 +1,8 @@
-package cmd
+package old
 
 import (
 	"errors"
+
 	"gopkg.in/gomail.v2"
 )
 
@@ -40,9 +41,9 @@ func (todo *Todo) Send(email string) error {
 	}
 
 	dialer := gomail.Dialer{
-		Host: "smtp.gmail.com",
-		Port: 465,
-		SSL: true,
+		Host:     "smtp.gmail.com",
+		Port:     465,
+		SSL:      true,
 		Username: config.GmailEmail,
 		Password: config.GmailPassword,
 	}

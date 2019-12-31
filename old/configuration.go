@@ -1,4 +1,4 @@
-package cmd
+package old
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 
 type Configuration struct {
 	MailDropEmail string `json:"mailDropEmail"`
-	GmailEmail string `json:"gmailEmail"`
+	GmailEmail    string `json:"gmailEmail"`
 	GmailPassword string `json:"gmailPassword"`
 }
 

@@ -1,9 +1,8 @@
-package main
+package old
 
 import (
 	"flag"
 	"fmt"
-	"of/cmd"
 	"os"
 )
 
