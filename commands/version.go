@@ -1,4 +1,4 @@
-package cmd
+package commands
 
 import (
 	"fmt"
@@ -12,8 +12,8 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of 'of'",
-	Long:  `All software has versions. This is Hugo's`,
+	Short: "Print the version number of the Omnifocus Task Sender",
+	Long:  `See Omnifocus Task Sender's Version Number`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Omnifocus task sender v0.1.0")
 	},

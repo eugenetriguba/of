@@ -1,7 +1,7 @@
 package main
 
-import "of/cmd"
+import "of/commands"
 
 func main() {
-	cmd.Execute()
+	commands.Execute()
 }

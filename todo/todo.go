@@ -1,8 +1,10 @@
-package old
+package todo
 
 import (
 	"errors"
+	"of/configuration"
 
+	errorFmt "github.com/pkg/errors"
 	"gopkg.in/gomail.v2"
 )
 
@@ -26,14 +28,14 @@ func (todo *Todo) Send(email string) error {
 		message.Attach(todo.Attachment)
 	}
 
-	config := Configuration{}
+	config := configuration.Configuration{}
 	err := config.Parse()
 	if err != nil {
 		return err
 	}
 
-	if config.GmailEmail == "" {
-		return errors.New("error: The gmail address in your configuration file is empty")
+	if config.GmailUsername == "" {
+		return errors.New("error: The gmail username in your configuration file is empty")
 	}
 
 	if config.GmailPassword == "" {
@@ -44,13 +46,13 @@ func (todo *Todo) Send(email string) error {
 		Host:     "smtp.gmail.com",
 		Port:     465,
 		SSL:      true,
-		Username: config.GmailEmail,
+		Username: config.GmailUsername,
 		Password: config.GmailPassword,
 	}
 
 	err = dialer.DialAndSend(message)
 	if err != nil {
-		return err
+		return errorFmt.Wrap(err, "Sending the todo failed")
 	}
 
 	return nil
