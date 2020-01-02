@@ -2,8 +2,9 @@ package commands
 
 import (
 	"fmt"
-	"of/todo"
 	"os"
+
+	"of/todo"
 
 	"github.com/spf13/cobra"
 )
@@ -12,9 +13,11 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a todo into your omnifocus inbox",
 	Long: `Add a todo into your omnifocus inbox
-	
-Usage:
- of add "my new todo" -n "cool note" -a "~/report.pdf"`,
+
+You can add the task name and optionally, a note or attachment.
+`,
+	Example: `of add "my new todo" -n "cool note" -a "~/report.pdf"`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		newTodo.Name = args[0]
 		err := newTodo.Send(config.MailDropEmail)
