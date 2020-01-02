@@ -1,4 +1,5 @@
-// Package configuration handles the configuration file for `of`.
+// Package configuration handles modifying, saving, and
+// outputing the configuration file.
 package configuration
 
 import (
@@ -13,38 +14,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Configuration represents the fields in the
+// configuration file.
 type Configuration struct {
 	MailDropEmail string `json:"mailDropEmail"`
 	GmailUsername string `json:"gmailUsername"`
 	GmailPassword string `json:"gmailPassword"`
-}
-
-// Retrieves the absolute path to the configuration directory
-// in an os independent way.
-//
-// The configuration folder is at `~/.of`.
-// If an error occurs, an empty string is returned as the path.
-func (config *Configuration) GetConfigDirPath() (string, error) {
-	dirPath, err := homedir.Expand("~/.of/")
-	if err != nil {
-		return "", err
-	}
-
-	return dirPath, nil
-}
-
-// Retrieves the absolute path to the configuration file
-// in an os independent way.
-//
-// The configuration file is at `~/.of/config.json`.
-// If an error occurs, an empty string is returned as the path.
-func (config *Configuration) GetConfigFilePath() (string, error) {
-	filePath, err := homedir.Expand("~/.of/config.json")
-	if err != nil {
-		return "", err
-	}
-
-	return filePath, nil
 }
 
 // Init initializes the configuration file by
@@ -68,7 +43,8 @@ func (config *Configuration) Init() {
 		os.Exit(1)
 	}
 
-	if !fs.DirExists(configDirPath) {
+	dirExists, err := fs.DirExists(configDirPath)
+	if !dirExists {
 		err := os.Mkdir(configDirPath, os.ModeDir)
 		if err != nil {
 			fmt.Println(err)
@@ -76,7 +52,8 @@ func (config *Configuration) Init() {
 		}
 	}
 
-	if !fs.FileExists(configFilePath) {
+	fileExists, err := fs.FileExists(configFilePath)
+	if !fileExists {
 		file, err := os.Create(configFilePath)
 		if err != nil {
 			fmt.Println(err)
@@ -98,8 +75,36 @@ func (config *Configuration) Init() {
 	}
 }
 
-// Parses the configuration file from `~/.of/config.json` and reads
-// the fields into this Configuration.
+// GetConfigDirPath retrieves the absolute path to
+// the configuration directory in an OS independent way.
+//
+// The configuration folder is at `~/.of`.
+// If an error occurs, an empty string is returned as the path.
+func (config *Configuration) GetConfigDirPath() (string, error) {
+	dirPath, err := homedir.Expand("~/.of/")
+	if err != nil {
+		return "", err
+	}
+
+	return dirPath, nil
+}
+
+// GetConfigFilePath retrieves the absolute path to the
+// configuration file in an OS independent way.
+//
+// The configuration file is at `~/.of/config.json`.
+// If an error occurs, an empty string is returned as the path.
+func (config *Configuration) GetConfigFilePath() (string, error) {
+	filePath, err := homedir.Expand("~/.of/config.json")
+	if err != nil {
+		return "", err
+	}
+
+	return filePath, nil
+}
+
+// Parse parses the configuration file from `~/.of/config.json`
+// and reads the fields into this Configuration.
 func (config *Configuration) Parse() error {
 	filePath, err := config.GetConfigFilePath()
 	if err != nil {
@@ -121,7 +126,8 @@ func (config *Configuration) Parse() error {
 	return nil
 }
 
-// Saves the current state of this Configuration to `~/.of/config.json`.
+// Save saves the current state of this Configuration to
+// `~/.of/config.json`.
 func (config *Configuration) Save() error {
 	filePath, err := config.GetConfigFilePath()
 	if err != nil {
@@ -147,7 +153,7 @@ func (config *Configuration) Save() error {
 	return nil
 }
 
-// Outputs the configuration file to stdout.
+// Output outputs the configuration file to stdout.
 func (config *Configuration) Output() error {
 	filePath, err := config.GetConfigFilePath()
 	if err != nil {
