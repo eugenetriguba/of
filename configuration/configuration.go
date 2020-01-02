@@ -27,28 +27,25 @@ type Configuration struct {
 // configuration file at ~/.of/config.json. It only
 // creates these if they do not exist.
 //
-// It is intended to be run only once, when the
-// application starts up. It prints out the error
-// if one occurs and exits with a code of 1.
-func (config *Configuration) Init() {
+// It is intended to be run when the application
+// starts up to make sure that the config directory
+// and file is created.
+func (config *Configuration) Init() error {
 	configDirPath, err := config.GetConfigDirPath()
 	if err != nil {
-		fmt.Println(errors.Wrap(err, "Retrieving the configuration folder failed"))
-		os.Exit(1)
+		return errors.Wrap(err, "Retrieving the configuration folder failed")
 	}
 
 	configFilePath, err := config.GetConfigFilePath()
 	if err != nil {
-		fmt.Println(errors.Wrap(err, "Retrieving the configuration file path failed"))
-		os.Exit(1)
+		return errors.Wrap(err, "Retrieving the configuration file path failed")
 	}
 
 	dirExists, err := fs.DirExists(configDirPath)
 	if !dirExists {
 		err := os.Mkdir(configDirPath, 0751)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return errors.Wrap(err, "Creating the configuration directory failed")
 		}
 	}
 
@@ -56,23 +53,22 @@ func (config *Configuration) Init() {
 	if !fileExists {
 		file, err := os.Create(configFilePath)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return errors.Wrap(err, "Creating the configuration file failed")
 		}
 		defer fs.CloseFile(file)
 
 		data, err := json.MarshalIndent(config, "", "    ")
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return errors.Wrap(err, "Marshaling the configuration file failed")
 		}
 
 		err = ioutil.WriteFile(configFilePath, data, 0644)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return errors.Wrap(err, "Writing out the configuration file failed")
 		}
 	}
+
+	return nil
 }
 
 // GetConfigDirPath retrieves the absolute path to
@@ -83,7 +79,7 @@ func (config *Configuration) Init() {
 func (config *Configuration) GetConfigDirPath() (string, error) {
 	dirPath, err := homedir.Expand("~/.of/")
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "Expanding the configuration directory path failed")
 	}
 
 	return dirPath, nil
@@ -97,7 +93,7 @@ func (config *Configuration) GetConfigDirPath() (string, error) {
 func (config *Configuration) GetConfigFilePath() (string, error) {
 	filePath, err := homedir.Expand("~/.of/config.json")
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "Expanding the configuration file path failed")
 	}
 
 	return filePath, nil

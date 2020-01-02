@@ -12,10 +12,8 @@ import (
 	"fmt"
 	"os"
 
-	"of/configuration"
-	"of/fs"
-
 	"github.com/spf13/cobra"
+	"of/configuration"
 )
 
 var rootCmd = &cobra.Command{
@@ -39,26 +37,13 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(config.Init)
-
-	configPath, err := config.GetConfigFilePath()
-	if err != nil {
+	if err := config.Init(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	configExists, err := fs.FileExists(configPath)
-	if err != nil {
+	if err := config.Parse(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
-
-	if configExists {
-		err := config.Parse()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
 	}
 }
