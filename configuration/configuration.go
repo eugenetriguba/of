@@ -45,7 +45,7 @@ func (config *Configuration) Init() {
 
 	dirExists, err := fs.DirExists(configDirPath)
 	if !dirExists {
-		err := os.Mkdir(configDirPath, os.ModeDir)
+		err := os.Mkdir(configDirPath, 0751)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
