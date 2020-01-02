@@ -11,8 +11,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-// Todo represents a todo that will be
-// sent into Omnifocus.
+// Todo represents a todo that will be sent into Omnifocus.
 type Todo struct {
 	Name       string
 	Note       string
@@ -46,7 +45,7 @@ func (todo *Todo) Send(emailAddress string) error {
 	config := configuration.Configuration{}
 	err := config.Parse()
 	if err != nil {
-		return err
+		return errorFmt.Wrap(err, "Parsing the configuration file failed")
 	}
 
 	if config.GmailUsername == "" {
