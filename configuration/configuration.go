@@ -145,7 +145,7 @@ func (config *Configuration) Save() error {
 		return errors.Wrap(err, "Marshaling the configuration file failed")
 	}
 
-	err = ioutil.WriteFile(filePath, data, os.FileMode(0644))
+	err = ioutil.WriteFile(filePath, data, 0644)
 	if err != nil {
 		return errors.Wrap(err, "Writing out the configuration file failed")
 	}
