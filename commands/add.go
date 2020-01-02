@@ -14,7 +14,7 @@ var addCmd = &cobra.Command{
 	Long: `Add a todo into your omnifocus inbox
 	
 Usage:
-	of add "my new todo" -n "cool note" -a "~/report.pdf"`,
+ of add "my new todo" -n "cool note" -a "~/report.pdf"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		newTodo.Name = args[0]
 		err := newTodo.Send(config.MailDropEmail)
@@ -31,6 +31,6 @@ var newTodo = todo.Todo{}
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	configCmd.Flags().StringVarP(&newTodo.Note, "note", "n", "", "Additional note")
-	configCmd.Flags().StringVarP(&newTodo.Attachment, "attachment", "a", "", "Absolute path to a file to attach to the todo")
+	addCmd.Flags().StringVarP(&newTodo.Note, "note", "n", "", "Additional note")
+	addCmd.Flags().StringVarP(&newTodo.Attachment, "attachment", "a", "", "Absolute path to a file to attach to the todo")
 }
