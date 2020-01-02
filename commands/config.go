@@ -18,6 +18,7 @@ and gmail password.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if cmd.Flags().NFlag() == 0 {
 			fmt.Println(cmd.Help())
+			return
 		}
 
 		config.Save()
