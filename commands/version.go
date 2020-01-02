@@ -12,9 +12,9 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of the Omnifocus Task Sender",
-	Long:  `See Omnifocus Task Sender's Version Number`,
+	Short: "Print the version number of the Omnifocus CLI",
+	Long:  `See Omnifocus CLI's Version Number`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Omnifocus task sender v0.1.0")
+		fmt.Println("Omnifocus CLI v0.1.0")
 	},
 }

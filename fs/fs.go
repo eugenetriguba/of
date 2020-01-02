@@ -11,9 +11,9 @@ import (
 // occurs by printing it out and exiting with a code of 1.
 //
 // Example:
-//	   file, err := os.Open(filePath)
-//     // handle error
-//     defer fs.CloseFile(file)
+//  file, err := os.Open(filePath)
+//  ... handle error
+//  defer fs.CloseFile(file)
 func CloseFile(file *os.File) {
 	err := file.Close()
 
@@ -29,14 +29,14 @@ func CloseFile(file *os.File) {
 // Returns true if the file exists; false otherwise.
 //
 // Example:
-//     exists, err := fs.FileExists(filePath)
-//	   if err != nil {
-//         // handle error
-//     }
+//  exists, err := fs.FileExists(filePath)
+//	if err != nil {
+//    ... handle error
+//  }
 //
-//     if exists {
-//         // do work
-//     }
+//  if exists {
+//    ... do work
+//  }
 func FileExists(filePath string) (bool, error) {
 	info, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
@@ -56,14 +56,14 @@ func FileExists(filePath string) (bool, error) {
 // Returns true if the directory exists; false otherwise.
 //
 // Example:
-//     exists, err := fs.DirExists(dirPath)
-//	   if err != nil {
-//         // handle error
-//     }
+//  exists, err := fs.DirExists(dirPath)
+//	if err != nil {
+//    ... handle error
+//  }
 //
-//     if exists {
-//         // do work
-//     }
+//  if exists {
+//    ... do work
+//  }
 func DirExists(dirPath string) (bool, error) {
 	info, err := os.Stat(dirPath)
 	if os.IsNotExist(err) {

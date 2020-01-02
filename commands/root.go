@@ -20,8 +20,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "of",
-	Short: "Of (Omnifocus) is a quick way to send tasks to your inbox",
-	Long: `The Omnifocus task sender lets you quickly send tasks to your inbox.
+	Short: "Quickly send tasks to your Omnifocus inbox",
+	Long: `Quickly send tasks to your Omnifocus inbox.
 
 The sent task will include the task name and optionally, a note or attachment.
 Complete documentation is available at https://github.com/eugenetriguba/of`,
