@@ -35,5 +35,5 @@ of config --password secretpassword
 Once configured, you can add todos into your inbox.
 ```bash
 $ of add "Go to the grocery store" --note "Make sure to get milk" --attachment "~/report.pdf"
-  Successfully set your todo!
+  Successfully sent your todo!
 ```
