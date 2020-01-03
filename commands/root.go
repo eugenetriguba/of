@@ -27,7 +27,7 @@ Complete documentation is available at https://github.com/eugenetriguba/of`,
 
 var config = configuration.Configuration{}
 
-// Execute is the entry point to the commands that
+// Execute is the entry point to the commands. It
 // leverages cobra.Command.Execute() to parse the given arguments.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
