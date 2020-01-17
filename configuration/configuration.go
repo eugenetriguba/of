@@ -29,41 +29,16 @@ type Configuration struct {
 // starts up to make sure that the config directory
 // and file is created.
 func (config *Configuration) Init() error {
-	configDirPath, err := config.GetConfigDirPath()
-	if err != nil {
-		return errors.Wrap(err, "Retrieving the configuration folder failed")
-	}
+	err := config.createFolder()
 
 	configFilePath, err := config.GetConfigFilePath()
 	if err != nil {
 		return errors.Wrap(err, "Retrieving the configuration file path failed")
 	}
 
-	dirExists, err := fs.DirExists(configDirPath)
-	if !dirExists {
-		err := os.Mkdir(configDirPath, 0751)
-		if err != nil {
-			return errors.Wrap(err, "Creating the configuration directory failed")
-		}
-	}
-
-	fileExists, err := fs.FileExists(configFilePath)
-	if !fileExists {
-		file, err := os.Create(configFilePath)
-		if err != nil {
-			return errors.Wrap(err, "Creating the configuration file failed")
-		}
-		defer fs.CloseFile(file)
-
-		data, err := json.MarshalIndent(config, "", "    ")
-		if err != nil {
-			return errors.Wrap(err, "Marshaling the configuration file failed")
-		}
-
-		err = ioutil.WriteFile(configFilePath, data, 0644)
-		if err != nil {
-			return errors.Wrap(err, "Writing out the configuration file failed")
-		}
+	created, err := config.Create(configFilePath)
+	if err != nil || !created {
+		return errors.Wrap(err, "Creating the configuration file failed")
 	}
 
 	return nil
@@ -163,4 +138,51 @@ func (config *Configuration) Output() error {
 	fileContents, err := ioutil.ReadAll(file)
 	fmt.Println(string(fileContents))
 	return nil
+}
+
+// Create is what creates the configuration file.
+func (config *Configuration) Create(filePath string) (bool, error) {
+	fileExists, err := fs.FileExists(filePath)
+	if err != nil {
+		return false, errors.Wrap(err, "error while checking if the given file path exists")
+	}
+
+	if !fileExists {
+		file, err := os.Create(filePath)
+		if err != nil {
+			return false, errors.Wrap(err, "Creating the configuration file failed")
+		}
+		defer fs.CloseFile(file)
+
+		data, err := json.MarshalIndent(config, "", "    ")
+		if err != nil {
+			return false, errors.Wrap(err, "Marshaling the configuration file failed")
+		}
+
+		err = ioutil.WriteFile(filePath, data, 0644)
+		if err != nil {
+			return false, errors.Wrap(err, "Writing out the configuration file failed")
+		}
+
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// createFolder checks whether the configuration folder exists and
+// if not, creates it.
+func (config *Configuration) createFolder() error {
+	configDirPath, err := config.GetConfigDirPath()
+	if err != nil {
+		return errors.Wrap(err, "Retrieving the configuration folder failed")
+	}
+
+	dirExists, err := fs.DirExists(configDirPath)
+	if !dirExists {
+		err := os.Mkdir(configDirPath, 0751)
+		if err != nil {
+			return errors.Wrap(err, "Creating the configuration directory failed")
+		}
+	}
 }
