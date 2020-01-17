@@ -15,7 +15,7 @@ var addCmd = &cobra.Command{
 You can add the task name and optionally, a note or attachment.
 `,
 	Example: `of add "my new todo" -n "cool note" -a "~/report.pdf"`,
-	Args: cobra.ExactArgs(1),
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		newTodo.Name = args[0]
 		err := newTodo.Send()
