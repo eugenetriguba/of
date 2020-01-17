@@ -11,8 +11,8 @@
   version = "0.0.5"
 
 [[constraint]]
-  name = "gopkg.in/gomail.v2"
-  version = "2.0.0"
+  name = "github.com/jordan-wright/email"
+  version = "3.0.0"
 
 [prune]
   go-tests = true

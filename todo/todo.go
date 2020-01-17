@@ -1,14 +1,11 @@
-// Package todo contains a todo type that represents a todo
-// sent to Omnifocus.
+// Package todo contains a todo type that represents a todo sent to Omnifocus.
 package todo
 
 import (
-	"errors"
-
-	"of/configuration"
-
+	"github.com/jordan-wright/email"
 	errorFmt "github.com/pkg/errors"
-	"gopkg.in/gomail.v2"
+	"net/smtp"
+	"of/configuration"
 )
 
 // Todo represents a todo that will be sent into Omnifocus.
@@ -28,46 +25,50 @@ type Todo struct {
 //   - The note of the todo is used as the email body
 //   - The attachment of the todo is, well, used as an attachment on the email.
 //   - The email will be from "omnifocus-cli@localhost.com".
-func (todo *Todo) Send(emailAddress string) error {
-	message := gomail.NewMessage()
-	message.SetHeader("From", "omnifocus-cli@localhost.com")
-	message.SetHeader("To", emailAddress)
-	message.SetHeader("Subject", todo.Name)
-
-	if todo.Note != "" {
-		message.SetBody("text/plain", todo.Note)
-	}
-
-	if todo.Attachment != "" {
-		message.Attach(todo.Attachment)
-	}
-
+func (todo *Todo) Send() error {
 	config := configuration.Configuration{}
 	err := config.Parse()
 	if err != nil {
 		return errorFmt.Wrap(err, "Parsing the configuration file failed")
 	}
 
-	if config.GmailUsername == "" {
-		return errors.New("error: The gmail username in your configuration file is empty")
+	message, err := todo.constructEmail(config.MailDropEmail)
+	if err != nil {
+		return err
 	}
 
-	if config.GmailPassword == "" {
-		return errors.New("error: The gmail password in your configuration file is empty")
-	}
-
-	dialer := gomail.Dialer{
-		Host:     "smtp.gmail.com",
-		Port:     465,
-		SSL:      true,
-		Username: config.GmailUsername,
-		Password: config.GmailPassword,
-	}
-
-	err = dialer.DialAndSend(message)
+	err = message.Send(
+		"smtp.gmail.com:587",
+		smtp.PlainAuth(
+			"",
+			config.GmailUsername,
+			config.GmailPassword,
+			"smtp.gmail.com",
+		),
+	)
 	if err != nil {
 		return errorFmt.Wrap(err, "Sending the todo failed")
 	}
 
 	return nil
+}
+
+func (todo *Todo) constructEmail(emailAddress string) (*email.Email, error) {
+	message := email.NewEmail()
+	message.From = "omnifocus-cli@localhost.com"
+	message.To = []string{emailAddress}
+	message.Subject = todo.Name
+
+	if todo.Note != "" {
+		message.Text = []byte(todo.Note)
+	}
+
+	if todo.Attachment != "" {
+		_, err := message.AttachFile(todo.Attachment)
+		if err != nil {
+			return nil, errorFmt.Wrap(err, "error: could not attach the specified file to the email")
+		}
+	}
+
+	return message, nil
 }
