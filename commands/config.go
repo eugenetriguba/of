@@ -2,8 +2,8 @@ package commands
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var configCmd = &cobra.Command{
@@ -21,14 +21,29 @@ and gmail password.`,
 			return
 		}
 
-		config.Save()
+		if err := config.Save(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		fmt.Println("Configuration updated!")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(configCmd)
-	configCmd.Flags().StringVarP(&config.MailDropEmail, "maildrop", "m", "", "Omnifocus Mail Drop Email")
-	configCmd.Flags().StringVarP(&config.GmailUsername, "username", "u", "", "Gmail Username")
-	configCmd.Flags().StringVarP(&config.GmailPassword, "password", "p", "", "Gmail Password")
+	configCmd.Flags().StringVarP(
+		&config.MailDropEmail,
+		"maildrop", "m", "",
+		"Set your Omnifocus Mail Drop Email",
+	)
+	configCmd.Flags().StringVarP(
+		&config.GmailUsername,
+		"username", "u", "",
+		"Set your Gmail Username",
+	)
+	configCmd.Flags().StringVarP(
+		&config.GmailPassword,
+		"password", "p", "",
+		"Set your Gmail Password",
+	)
 }

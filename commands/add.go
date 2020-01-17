@@ -2,11 +2,9 @@ package commands
 
 import (
 	"fmt"
-	"os"
-
-	"of/todo"
-
 	"github.com/spf13/cobra"
+	"of/todo"
+	"os"
 )
 
 var addCmd = &cobra.Command{
@@ -20,7 +18,7 @@ You can add the task name and optionally, a note or attachment.
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		newTodo.Name = args[0]
-		err := newTodo.Send(config.MailDropEmail)
+		err := newTodo.Send()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -34,6 +32,14 @@ var newTodo = todo.Todo{}
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	addCmd.Flags().StringVarP(&newTodo.Note, "note", "n", "", "Additional note")
-	addCmd.Flags().StringVarP(&newTodo.Attachment, "attachment", "a", "", "Absolute path to a file to attach to the todo")
+	addCmd.Flags().StringVarP(
+		&newTodo.Note,
+		"note", "n", "",
+		"Additional information to go into the note section of the todo",
+	)
+	addCmd.Flags().StringVarP(
+		&newTodo.Attachment,
+		"attachment", "a", "",
+		"Absolute path to a file to attach to the todo",
+	)
 }

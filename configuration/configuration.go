@@ -1,17 +1,15 @@
 // Package configuration handles modifying, saving, and
-// outputing the configuration file.
+// outputting the configuration file.
 package configuration
 
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
-
-	"of/fs"
-
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
+	"io/ioutil"
+	"of/fs"
+	"os"
 )
 
 // Configuration represents the fields in the
