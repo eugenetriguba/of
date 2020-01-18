@@ -37,3 +37,9 @@ Once configured, you can add todos into your inbox.
 $ of add "Go to the grocery store" --note "Make sure to get milk" --attachment "~/report.pdf"
   Successfully sent your todo!
 ```
+
+## Installation
+
+```bash
+$ go get -u github.com/eugenetriguba/of
+```
