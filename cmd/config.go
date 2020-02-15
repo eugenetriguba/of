@@ -1,9 +1,10 @@
-package commands
+package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var configCmd = &cobra.Command{
@@ -45,5 +46,10 @@ func init() {
 		&config.GmailPassword,
 		"password", "p", "",
 		"Set your Gmail Password",
+	)
+	configCmd.Flags().StringVarP(
+		&config.ApiKey,
+		"apikey", "a", "",
+		"Set your gmail api key.",
 	)
 }

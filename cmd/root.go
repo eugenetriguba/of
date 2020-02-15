@@ -6,14 +6,15 @@
 // 'of config': Modify the configuration file using flags.
 // 'of config output': Output the current configuration file to stdout.
 // 'of version': Print out the current version of the cli.
-package commands
+package cmd
 
 import (
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
-	"of/configuration"
+
+	"github.com/eugenetriguba/of/configuration"
 )
 
 var rootCmd = &cobra.Command{

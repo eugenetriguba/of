@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
   * Refactor todo `Send()` to use github.com/jordan-wright/email instead of gomail.v2.
-  * 
 
 ## [0.2.0] - 2020-01-01
 ### Added

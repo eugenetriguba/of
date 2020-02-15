@@ -5,11 +5,13 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
-	"io/ioutil"
-	"of/fs"
-	"os"
+
+	"github.com/eugenetriguba/of/fs"
 )
 
 // Configuration represents the fields in the
@@ -18,6 +20,7 @@ type Configuration struct {
 	MailDropEmail string `json:"mailDropEmail"`
 	GmailUsername string `json:"gmailUsername"`
 	GmailPassword string `json:"gmailPassword"`
+	ApiKey        string `json:"apiKey"`
 }
 
 // Init initializes the configuration file by
@@ -185,4 +188,6 @@ func (config *Configuration) createFolder() error {
 			return errors.Wrap(err, "Creating the configuration directory failed")
 		}
 	}
+
+	return nil
 }

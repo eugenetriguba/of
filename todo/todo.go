@@ -2,10 +2,15 @@
 package todo
 
 import (
+	"context"
+	"net/smtp"
+
 	"github.com/jordan-wright/email"
 	errorFmt "github.com/pkg/errors"
-	"net/smtp"
-	"of/configuration"
+	"google.golang.org/api/gmail/v1"
+	"google.golang.org/api/option"
+
+	"github.com/eugenetriguba/of/configuration"
 )
 
 // Todo represents a todo that will be sent into Omnifocus.
@@ -32,31 +37,32 @@ func (todo *Todo) Send() error {
 		return errorFmt.Wrap(err, "Parsing the configuration file failed")
 	}
 
-	message, err := todo.constructEmail(config.MailDropEmail)
+	message, err := todo.constructEmail(&config)
 	if err != nil {
 		return err
 	}
 
-	err = message.Send(
-		"smtp.gmail.com:587",
-		smtp.PlainAuth(
+	if config.ApiKey != "" {
+		auth, err := authenticateWithGmail(&config)
+	} else {
+		auth := smtp.PlainAuth(
 			"",
 			config.GmailUsername,
 			config.GmailPassword,
 			"smtp.gmail.com",
-		),
-	)
-	if err != nil {
-		return errorFmt.Wrap(err, "Sending the todo failed")
+		)
 	}
 
+	if err = message.Send("smtp.gmail.com:587", auth); err != nil {
+		return errorFmt.Wrap(err, "Sending the todo failed")
+	}
 	return nil
 }
 
-func (todo *Todo) constructEmail(emailAddress string) (*email.Email, error) {
+func (todo *Todo) constructEmail(config *configuration.Configuration) (*email.Email, error) {
 	message := email.NewEmail()
 	message.From = "omnifocus-cli@localhost.com"
-	message.To = []string{emailAddress}
+	message.To = []string{config.MailDropEmail}
 	message.Subject = todo.Name
 
 	if todo.Note != "" {
@@ -71,4 +77,9 @@ func (todo *Todo) constructEmail(emailAddress string) (*email.Email, error) {
 	}
 
 	return message, nil
+}
+
+func authenticateWithGmail(config *configuration.Configuration) (error) {
+	ctx := context.Background()
+	gmailService, err := gmail.NewService(ctx, option.WithAPIKey(config.ApiKey))
 }
