@@ -185,4 +185,6 @@ func (config *Configuration) createFolder() error {
 			return errors.Wrap(err, "Creating the configuration directory failed")
 		}
 	}
+	
+	return nil
 }
