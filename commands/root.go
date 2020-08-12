@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/eugenetriguba/of/configuration"
 	"github.com/spf13/cobra"
-	"of/configuration"
 )
 
 var rootCmd = &cobra.Command{

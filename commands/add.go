@@ -2,9 +2,10 @@ package commands
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"of/todo"
 	"os"
+
+	"github.com/eugenetriguba/of/todo"
+	"github.com/spf13/cobra"
 )
 
 var addCmd = &cobra.Command{

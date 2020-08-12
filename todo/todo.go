@@ -2,10 +2,11 @@
 package todo
 
 import (
+	"net/smtp"
+
+	"github.com/eugenetriguba/of/configuration"
 	"github.com/jordan-wright/email"
 	errorFmt "github.com/pkg/errors"
-	"net/smtp"
-	"of/configuration"
 )
 
 // Todo represents a todo that will be sent into Omnifocus.

@@ -2,7 +2,7 @@
 // inbox by leveraging Omnifocus's Mail Drop feature: https://support.omnigroup.com/omnifocus-mail-drop/.
 package main
 
-import "of/commands"
+import "github.com/eugenetriguba/of/commands"
 
 func main() {
 	commands.Execute()

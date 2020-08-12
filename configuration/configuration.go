@@ -5,11 +5,12 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
+
+	"github.com/eugenetriguba/of/fs"
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
-	"io/ioutil"
-	"of/fs"
-	"os"
 )
 
 // Configuration represents the fields in the
@@ -185,6 +186,6 @@ func (config *Configuration) createFolder() error {
 			return errors.Wrap(err, "Creating the configuration directory failed")
 		}
 	}
-	
+
 	return nil
 }
