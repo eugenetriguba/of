@@ -13,12 +13,18 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Configuration represents the fields in the
+// Config represents the fields in the
 // configuration file.
-type Configuration struct {
+type Config struct {
 	MailDropEmail string `json:"mailDropEmail"`
 	GmailUsername string `json:"gmailUsername"`
 	GmailPassword string `json:"gmailPassword"`
+}
+
+// NewConfig creates a new Config type
+func NewConfig() *Config {
+	var c Config
+	return &c
 }
 
 // Init initializes the configuration file by
@@ -29,7 +35,7 @@ type Configuration struct {
 // It is intended to be run when the application
 // starts up to make sure that the config directory
 // and file is created.
-func (config *Configuration) Init() error {
+func (c *Config) Init() error {
 	err := config.createFolder()
 
 	configFilePath, err := config.GetConfigFilePath()
@@ -50,7 +56,7 @@ func (config *Configuration) Init() error {
 //
 // The configuration folder is at `~/.of`.
 // If an error occurs, an empty string is returned as the path.
-func (config *Configuration) GetConfigDirPath() (string, error) {
+func (c *Config) GetConfigDirPath() (string, error) {
 	dirPath, err := homedir.Expand("~/.of/")
 	if err != nil {
 		return "", errors.Wrap(err, "Expanding the configuration directory path failed")
@@ -64,7 +70,7 @@ func (config *Configuration) GetConfigDirPath() (string, error) {
 //
 // The configuration file is at `~/.of/config.json`.
 // If an error occurs, an empty string is returned as the path.
-func (config *Configuration) GetConfigFilePath() (string, error) {
+func (c *Config) GetConfigFilePath() (string, error) {
 	filePath, err := homedir.Expand("~/.of/config.json")
 	if err != nil {
 		return "", errors.Wrap(err, "Expanding the configuration file path failed")
@@ -74,9 +80,9 @@ func (config *Configuration) GetConfigFilePath() (string, error) {
 }
 
 // Parse parses the configuration file from `~/.of/config.json`
-// and reads the fields into this Configuration.
-func (config *Configuration) Parse() error {
-	filePath, err := config.GetConfigFilePath()
+// and reads the fields into this Config.
+func (c *Config) Parse() error {
+	filePath, err := c.GetConfigFilePath()
 	if err != nil {
 		return errors.Wrap(err, "Retreiving the configuration file path failed")
 	}
@@ -88,7 +94,7 @@ func (config *Configuration) Parse() error {
 	defer fs.CloseFile(file)
 
 	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
+	err = decoder.Decode(&c)
 	if err != nil {
 		return errors.Wrap(err, "Decoding the configuration file failed")
 	}
@@ -96,10 +102,10 @@ func (config *Configuration) Parse() error {
 	return nil
 }
 
-// Save saves the current state of this Configuration to
+// Save saves the current state of this Config to
 // `~/.of/config.json`.
-func (config *Configuration) Save() error {
-	filePath, err := config.GetConfigFilePath()
+func (c *Config) Save() error {
+	filePath, err := c.GetConfigFilePath()
 	if err != nil {
 		return errors.Wrap(err, "Retreiving the configuration file path failed")
 	}
@@ -110,7 +116,7 @@ func (config *Configuration) Save() error {
 	}
 	defer fs.CloseFile(file)
 
-	data, err := json.MarshalIndent(*config, "", "    ")
+	data, err := json.MarshalIndent(*c, "", "    ")
 	if err != nil {
 		return errors.Wrap(err, "Marshaling the configuration file failed")
 	}
@@ -124,8 +130,8 @@ func (config *Configuration) Save() error {
 }
 
 // Output outputs the configuration file to stdout.
-func (config *Configuration) Output() error {
-	filePath, err := config.GetConfigFilePath()
+func (c *Config) Output() error {
+	filePath, err := c.GetConfigFilePath()
 	if err != nil {
 		return errors.Wrap(err, "Retreiving the configuration file path failed")
 	}
@@ -142,7 +148,7 @@ func (config *Configuration) Output() error {
 }
 
 // Create is what creates the configuration file.
-func (config *Configuration) Create(filePath string) (bool, error) {
+func (c *Config) Create(filePath string) (bool, error) {
 	fileExists, err := fs.FileExists(filePath)
 	if err != nil {
 		return false, errors.Wrap(err, "error while checking if the given file path exists")
@@ -155,7 +161,7 @@ func (config *Configuration) Create(filePath string) (bool, error) {
 		}
 		defer fs.CloseFile(file)
 
-		data, err := json.MarshalIndent(config, "", "    ")
+		data, err := json.MarshalIndent(c, "", "    ")
 		if err != nil {
 			return false, errors.Wrap(err, "Marshaling the configuration file failed")
 		}
@@ -173,8 +179,8 @@ func (config *Configuration) Create(filePath string) (bool, error) {
 
 // createFolder checks whether the configuration folder exists and
 // if not, creates it.
-func (config *Configuration) createFolder() error {
-	configDirPath, err := config.GetConfigDirPath()
+func (c *Config) createFolder() error {
+	configDirPath, err := c.GetConfigDirPath()
 	if err != nil {
 		return errors.Wrap(err, "Retrieving the configuration folder failed")
 	}

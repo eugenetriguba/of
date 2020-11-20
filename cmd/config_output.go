@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/eugenetriguba/of/configuration"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +16,8 @@ var configOutputCmd = &cobra.Command{
 The configuration file is stored at '~/.of/config.json'.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
+		config := configuration.NewConfiguration()
+
 		if err := config.Output(); err != nil {
 			fmt.Println(err)
 			os.Exit(1)

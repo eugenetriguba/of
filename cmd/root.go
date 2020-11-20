@@ -6,7 +6,7 @@
 // 'of config': Modify the configuration file using flags.
 // 'of config output': Output the current configuration file to stdout.
 // 'of version': Print out the current version of the cli.
-package commands
+package cmd
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ The sent task will include the task name and optionally, a note or attachment.
 Complete documentation is available at https://github.com/eugenetriguba/of`,
 }
 
-var config = configuration.Configuration{}
+var config Config := NewConfig()
 
 // Execute is the entry point to the commands. It
 // leverages cobra.Command.Execute() to parse the given arguments.
