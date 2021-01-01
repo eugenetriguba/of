@@ -33,6 +33,9 @@ of config --username email@gmail.com
 of config --password secretpassword
 ```
 
+The gmail password should be a app-specific password, otherwise
+Gmail will send back an error. See more here: https://support.google.com/accounts/answer/185833
+
 Once configured, you can add todos into your inbox.
 
 ```bash
