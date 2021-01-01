@@ -12,15 +12,16 @@
     <a href="https://codebeat.co/projects/github-com-eugenetriguba-of-master">
         <img alt="codebeat badge" src="https://codebeat.co/badges/4bfb8156-c136-4544-bbe7-f5a842e4594c" />
     </a>
-    <img alt="Version Badge" src="https://img.shields.io/badge/version-0.2.0-blue" style="max-width:100%;">
+    <img alt="Version Badge" src="https://img.shields.io/badge/version-0.2.1-blue" style="max-width:100%;">
 </p>
 
 The Omnifocus CLI allows you to quickly send a todo to your Omnifocus
 inbox. It makes use of [Omnifocus's mail drop](https://support.omnigroup.com/omnifocus-mail-drop/) feature. This feature gives you an email address that you can send emails to. When an email is sent to this address, it uses that email to create a todo in your Omnifocus inbox. This CLI
-allows you to quickly send that email using an ``of`` command.
+allows you to quickly send that email using an `of` command.
 
-Before you can start sending todos into your inbox, you'll have to setup a few pieces of 
-configuration. 
+Before you can start sending todos into your inbox, you'll have to setup a few pieces of
+configuration.
+
 ```bash
 // Sets your Omnifocus mail drop email
 of config --maildrop fake-mailbox@omnisync.com
@@ -33,6 +34,7 @@ of config --password secretpassword
 ```
 
 Once configured, you can add todos into your inbox.
+
 ```bash
 $ of add "Go to the grocery store" --note "Make sure to get milk" --attachment "~/report.pdf"
   Successfully sent your todo!
